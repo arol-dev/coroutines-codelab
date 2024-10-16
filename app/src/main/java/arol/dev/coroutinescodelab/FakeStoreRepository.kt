@@ -14,7 +14,6 @@ class FakeStoreRepositoryImpl(
             requestMethod = "GET"
             setRequestProperty("Content-Type", "application/json")
             setRequestProperty("Accept", "application/json")
-            doOutput = true
             val jsonAsText = inputStream.bufferedReader().readText()
             val productsAsJSONArray = JSONArray(jsonAsText)
             val products = mutableListOf<Product>()
