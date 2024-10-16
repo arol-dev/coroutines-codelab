@@ -2,10 +2,13 @@ package arol.dev.coroutinescodelab
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class FakeStoreViewModel(
     private val fakeStoreRepository: FakeStoreRepository
@@ -17,12 +20,14 @@ class FakeStoreViewModel(
     val loading = _loading.asStateFlow()
 
     fun fetchProducts() {
-        _loading.value = true
-        val result = fakeStoreRepository.getProducts()
-        if (result.isSuccess) {
-            _products.value = result.getOrDefault(emptyList())
+        viewModelScope.launch(Dispatchers.IO) {
+            _loading.value = true
+            val result = fakeStoreRepository.getProducts()
+            if (result.isSuccess) {
+                _products.value = result.getOrDefault(emptyList())
+            }
+            _loading.value = false
         }
-        _loading.value = false
     }
 
     companion object {
