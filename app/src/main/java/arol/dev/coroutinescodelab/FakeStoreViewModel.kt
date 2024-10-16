@@ -20,7 +20,7 @@ class FakeStoreViewModel(
     val loading = _loading.asStateFlow()
 
     fun fetchProducts() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _loading.value = true
             val result = fakeStoreRepository.getProducts()
             if (result.isSuccess) {
